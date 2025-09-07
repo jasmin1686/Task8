@@ -1,6 +1,6 @@
 merge :هو statement في SQL   بيسمحلي ادمج  بين جدولين.
 
-:يعني في جملة واحدة اقدر
+: يعني في جملة واحدة اقدر اعمل
 
 INSERT (لو السجل مش موجود).
 
@@ -74,5 +74,6 @@ WHEN NOT MATCHED BY SOURCE THEN
 الفرق مابين ال merge وال join:
 merge: للتعديل والتحديث (insert/update/delete) → بيغير بيانات فعلية في الجداول.
 join: للعرض فقط (select query) → بيجيب بيانات مترابطة من جداول.
+
 
 
