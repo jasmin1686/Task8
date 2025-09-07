@@ -1,0 +1,78 @@
+merge :هو statement في SQL   بيسمحلي ادمج  بين جدولين.
+
+:يعني في جملة واحدة اقدر
+
+INSERT (لو السجل مش موجود).
+
+UPDATE (لو السجل موجود ومحتاج تعديل).
+
+DELETE (لو السجل موجود في الجدول الأساسي ومش موجود في الجدول التاني).
+
+بالتالي هو بيوفرلك إنك تكتب 3 جمل (INSERT / UPDATE / DELETE) في جملة واحدة.
+
+
+  (Syntax in merge):
+
+MERGE target_table AS T
+USING source_table AS S
+ON T.id = S.id
+WHEN MATCHED THEN
+    UPDATE SET T.name = S.name, T.age = S.age
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT (id, name, age)
+    VALUES (S.id, S.name, S.age)
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+
+
+MERGE target_table → الجدول اللي هتعمل عليه التعديل (الهدف).
+
+USING source_table → الجدول اللي جايب منه البيانات (المصدر).
+
+ON condition → الشرط اللي بيربط الجدولين (مفتاح أساسي/عمود مشترك).
+
+WHEN MATCHED → لو الشرط اتحقق (السجل موجود في الجدولين).
+
+ممكن تعمل UPDATE.
+
+WHEN NOT MATCHED BY TARGET → السجل موجود في المصدر ومش موجود في الهدف.
+
+ساعتها تعمل INSERT.
+
+WHEN NOT MATCHED BY SOURCE → السجل موجود في الهدف ومش موجود في المصدر.
+
+غالبًا هنا هنعمل DELETE.
+
+ example: 
+-------------------
+
+عندي جدول Employees 
+و جدول مؤقت Employees_Staging.
+
+MERGE Employees AS E
+USING Employees_Staging AS ES
+ON E.EmployeeID = ES.EmployeeID
+WHEN MATCHED THEN
+    UPDATE SET E.Name = ES.Name, E.Salary = ES.Salary
+WHEN NOT MATCHED BY TARGET THEN
+    INSERT (EmployeeID, Name, Salary)
+    VALUES (ES.EmployeeID, ES.Name, ES.Salary)
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
+
+
+ : هنا
+
+لو الموظف موجود في الجدولين → هيعمل تحديث للبيانات.
+
+لو الموظف مش موجود في الجدول الأساسي بس موجود في الجدول المؤقت → هيعمله إضافة.
+
+لو الموظف موجود في الجدول الأساسي بس مش موجود في المؤقت → هيتم حذفه.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+الفرق مابين ال merge وال join:
+merge: للتعديل والتحديث (insert/update/delete) → بيغير بيانات فعلية في الجداول.
+join: للعرض فقط (select query) → بيجيب بيانات مترابطة من جداول.
+
+
